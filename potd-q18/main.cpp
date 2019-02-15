@@ -72,5 +72,33 @@ int main() {
   std::cout<<"Merged List:"<<std::endl;
   printList(&p0);
 
+
+// Example #3
+  Node pp0, pp2, pp11, pp33, pp33_2, pp44;
+  pp0.data_ = 0;
+  pp2.data_ = 2;
+  pp11.data_ = 11;
+  pp33.data_ = 33;
+  pp33_2.data_ = 33;
+  pp44.data_ = 44;
+
+  pp0.next_ = &pp2;
+  pp2.next_ = NULL;
+
+  pp11.next_ = &pp33;
+  pp33.next_ = &pp33_2;
+  pp33_2.next_ = &pp44;
+  pp44.next_ = NULL;
+
+  std::cout<<"First List:"<<std::endl;
+  printList(&pp11);
+  std::cout<<"Second List:"<<std::endl;
+  printList(&pp0);
+
+  mergeList(&pp11, &pp0);
+
+  std::cout<<"Merged List:"<<std::endl;
+  printList(&pp11);
+
   return 0;
 }
