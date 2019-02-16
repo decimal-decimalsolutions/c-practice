@@ -1,3 +1,4 @@
+#include <iostream>
 /**
  * @file quackfun.cpp
  * This is where you will implement the required functions for the
@@ -26,15 +27,21 @@ namespace QuackFun {
  * @return  The sum of all the elements in the stack, leaving the original
  *          stack in the same state (unchanged).
  */
-template <typename T>
-T sum(stack<T>& s)
-{
+    template<typename T>
+    T sum(stack <T> &s){
+        stack<T> temp;
+        temp.operator=(s);
+        if (temp.empty())
+            return 0;
 
-    // Your code here
-    return T(); // stub return value (0 for primitive types). Change this!
-                // Note: T() is the default value for objects, and 0 for
-                // primitive types
-}
+        int t;
+        t = temp.top();
+        temp.pop();
+        // Your code here
+        return t + sum(temp); // stub return value (0 for primitive types). Change this!
+        // Note: T() is the default value for objects, and 0 for
+        // primitive types
+    }
 
 /**
  * Checks whether the given string (stored in a queue) has balanced brackets.
@@ -53,12 +60,11 @@ T sum(stack<T>& s)
  * @param input The queue representation of a string to check for balanced brackets in
  * @return      Whether the input string had balanced brackets
  */
-bool isBalanced(queue<char> input)
-{
+    bool isBalanced(queue<char> input){
 
-    // @TODO: Make less optimistic
-    return true;
-}
+        // @TODO: Make less optimistic
+        return true;
+    }
 
 /**
  * Reverses even sized blocks of items in the queue. Blocks start at size
@@ -75,14 +81,57 @@ bool isBalanced(queue<char> input)
  *
  * @param q A queue of items to be scrambled
  */
-template <typename T>
-void scramble(queue<T>& q)
-{
-    stack<T> s;
-    // optional: queue<T> q2;
+    template<typename T>
+    void scramble(queue <T> &q){
+        stack<T> s;
+        queue<T> q2;
+        if (!q.empty()) {
+            int even = 2;
+            int odd = 1;
+            int count = 1;//q.size();
+            bool evendone = true;
+            bool odddone = false;
+            while (q.size() > 0) {
+//            std::cout<<q.front()<<" count:"<<count<<std::endl;
+                if (!evendone) {
+                    int c = 0;
+                    while (!q.empty() && c < even) {
+//                    std::cout<<__LINE__<<std::endl;
+                        s.push(q.front());
+                        q.pop();
+                        c++;
+                    }
+                    while (!s.empty()) {
+                        q2.push(s.top());
+                        s.pop();
+                        count++;
+                    }
+                    even = even + 2;
+                    evendone = true;
+                    odddone = false;
+//                std::cout<<" q size:"<<q.size()<<std::endl;
+//                std::cout<<" if count:"<<count<<std::endl;
+                } else if (!odddone) {
+                    int c = 0;
+                    while (!q.empty() && c < odd) {
+//                      std::cout<<__LINE__<<std::endl;
 
-    // Your code here
-}
+                        q2.push(q.front());
+                        q.pop();
+                        c++;
+                        count++;
+                    }
+                    odd = odd + 2;
+                    evendone = false;
+                    odddone = true;
+//                std::cout<<" q size:"<<q.size()<<std::endl;
+//                std::cout<<" else count:"<<count<<std::endl;
+                }
+//            std::cout<<" q size:"<<q.size()<<std::endl;
+            }
+        }
+        q = q2;
+    }
 
 /**
  * Checks if the parameter stack and queue are the same. A stack and a queue
@@ -106,16 +155,37 @@ void scramble(queue<T>& q)
  * @param q The queue to compare
  * @return  true if the stack and the queue are the same; false otherwise
  */
-template <typename T>
-bool verifySame(stack<T>& s, queue<T>& q)
-{
-    bool retval = true; // optional
-    // T temp1; // rename me
-    // T temp2; // rename :)
+    template<typename T>
+    bool verifySame(stack <T> &s, queue <T> &q){
+        bool retval = true; // optional
 
-    // Your code here
+        if (s.size() != q.size()) {
+//            std::cout << __LINE__ << std::endl;
+            return !retval;
+        }
 
-    return retval;
+        stack<T> sTemp = s;
+        queue<T> qTemp = q;
+        stack<T> qTempStack;
+
+        while (!qTemp.empty()) {
+            qTempStack.push(qTemp.front());
+            qTemp.pop();
+        }
+
+
+        while (!qTempStack.empty()) {
+//            std::cout << __LINE__ << std::endl;
+//            std::cout << sTemp.top() << " " << qTempStack.top() << std::endl;
+            if (sTemp.top() != qTempStack.top()) {
+                std::cout << __LINE__ << std::endl;
+                return !retval;
+            }
+            qTempStack.pop();
+            sTemp.pop();
+        }
+        return retval;
+    }
+
 }
 
-}
