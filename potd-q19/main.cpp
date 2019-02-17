@@ -18,58 +18,134 @@ void printList(Node *head) {
 
 
 int main() {
-  // Example #1
-  Node n_0, n_1, n_2, n_22, n_3, n_4;
-  n_0.data_ = 0;
-  n_1.data_ = 1;
-  n_2.data_ = 2;
-  n_22.data_ = 2;
-  n_3.data_ = 3;
-  n_4.data_ = 4;
+    // Example #1
+    Node n_0, n_1, n_2, n_22, n_3, n_4;
+    n_0.data_ = 0;
+    n_1.data_ = 1;
+    n_2.data_ = 2;
+    n_22.data_ = 2;
+    n_3.data_ = 3;
+    n_4.data_ = 4;
 
-  n_0.next_ = &n_1;
-  n_1.next_ = &n_2;
-  n_2.next_ = NULL;
+    n_0.next_ = &n_1;
+    n_1.next_ = &n_2;
+    n_2.next_ = NULL;
 
-  n_22.next_ = &n_3;
-  n_3.next_ = &n_4;
-  n_4.next_ = NULL;
+    n_22.next_ = &n_3;
+    n_3.next_ = &n_4;
+    n_4.next_ = NULL;
 
-  std::cout<<"First List:"<<std::endl;
-  printList(&n_0);
-  std::cout<<"Second List:"<<std::endl;
-  printList(&n_22);
+    std::cout << "First List:" << std::endl;
+    printList(&n_0);
+    std::cout << "Second List:" << std::endl;
+    printList(&n_22);
 
-  Node *union1 = listUnion(&n_0, &n_22);
-  std::cout<<"Union:"<<std::endl;
-  printList(union1);
-  std::cout<<std::endl;
+    Node *union1 = listUnion(&n_0, &n_22);
+
+    std::cout << "Union:" << std::endl;
+    printList(union1);
+    std::cout << std::endl;
+
+    std::cout << "First List:Null" << std::endl;
+    std::cout << "Second List: " << std::endl;
+    printList(&n_22);
+
+    Node *union2 = listUnion(NULL, &n_22);
+    std::cout << "Union:" << std::endl;
+    printList(union2);
+    std::cout << std::endl;
+
+    std::cout << "First List:" << std::endl;
+    printList(&n_0);
+    std::cout << "Second List: NULL" << std::endl;
+
+    Node *union3 = listUnion(&n_0, NULL);
+    std::cout << "Union:" << std::endl;
+    printList(union3);
+    std::cout << std::endl;
+
+    std::cout << "First List: NULL" << std::endl;
+    std::cout << "Second List: NULL" << std::endl;
+    Node *union4 = listUnion(NULL, NULL);
+    std::cout << "Union:" << std::endl;
+    printList(union4);
+    std::cout << std::endl;
 
 
-  // Example #2
-  Node p00, p01, p02, p03, p10, p11, p12, p13;
+    // Example #2
+    Node p00, p01, p02, p03, p10, p11, p12, p13;
 
-  // List 1: 0 2 2 2
-  p00.data_ = 0; p00.next_ = &p01;
-  p01.data_ = 2; p01.next_ = &p02;
-  p02.data_ = 2; p02.next_ = &p03;
-  p03.data_ = 2; p03.next_ = NULL;
+    // List 1: 0 2 2 2
+    p00.data_ = 0;
+    p00.next_ = &p01;
+    p01.data_ = 2;
+    p01.next_ = &p02;
+    p02.data_ = 2;
+    p02.next_ = &p03;
+    p03.data_ = 2;
+    p03.next_ = NULL;
 
-  // List 2: 0 0 0 4
-  p10.data_ = 0; p10.next_ = &p11;
-  p11.data_ = 0; p11.next_ = &p12;
-  p12.data_ = 0; p12.next_ = &p13;
-  p13.data_ = 4; p13.next_ = NULL;
+    // List 2: 0 0 0 4
+    p10.data_ = 0;
+    p10.next_ = &p11;
+    p11.data_ = 0;
+    p11.next_ = &p12;
+    p12.data_ = 0;
+    p12.next_ = &p13;
+    p13.data_ = 4;
+    p13.next_ = NULL;
 
-  std::cout<<"First List:"<<std::endl;
-  printList(&p00);
-  std::cout<<"Second List:"<<std::endl;
-  printList(&p10);
+    std::cout << "First List:" << std::endl;
+    printList(&p00);
+    std::cout << "Second List:" << std::endl;
+    printList(&p10);
 
-  Node *union2 = listUnion(&p00, &p10);
-  std::cout<<"Union:"<<std::endl;
-  printList(union2);
-  std::cout<<std::endl;
+    Node *union22 = listUnion(&p00, &p10);
+    std::cout << "Union:" << std::endl;
+    printList(union22);
+    std::cout << std::endl;
 
-  return 0;
+    std::cout << "First List:" << std::endl;
+    printList(&p00);
+    std::cout << "Second List: NULL" << std::endl;
+
+    Node *union23 = listUnion(&p00, NULL);
+    std::cout << "Union:" << std::endl;
+    printList(union23);
+    std::cout << std::endl;
+
+    std::cout << "First List: NULL" << std::endl;
+    std::cout << "Second List:" << std::endl;
+    printList(&p10);
+    Node *union24 = listUnion(NULL, &p10);
+    std::cout << "Union:" << std::endl;
+    printList(union24);
+    std::cout << std::endl;
+
+    std::cout << "First List: NULL" << std::endl;
+    std::cout << "Second List: NULL" << std::endl;
+    Node *union25 = listUnion(NULL, NULL);
+    std::cout << "Union:" << std::endl;
+    printList(union25);
+    std::cout << std::endl;
+
+
+
+
+    // List 1: 0
+    p00.data_ = 0;
+    p00.next_ = NULL;
+
+    // List 2: 1
+    p10.data_ =1;
+    p10.next_ = NULL;
+
+    std::cout << "First List(one element):" << std::endl;
+    printList(&p00);
+    std::cout << "Second List(one element):" << std::endl;
+    printList(&p10);
+    std::cout << "Union:" << std::endl;
+    printList(listUnion(&p00, &p10));
+    std::cout << std::endl;
+    return 0;
 }
