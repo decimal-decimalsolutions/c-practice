@@ -28,19 +28,23 @@ namespace QuackFun {
  *          stack in the same state (unchanged).
  */
     template<typename T>
-    T sum(stack <T> &s){
-        stack<T> temp;
-        temp.operator=(s);
-        if (temp.empty())
-            return 0;
+    T sum(stack<T> &s){
+//        std::cout<< "Size:"<<s.size()<<std::endl;
+        if (s.size() == 1) {
+            T temp = s.top();
+//            std::cout<< "Size:"<<s.size()<<std::endl;
+            return temp;
+        } else {
+            T t;
+            t = s.top();
+            s.pop();
+            // Your code here
+            T tSum = t + sum(s);
+            s.push(t);
+//            std::cout<< "Now Size:"<<s.size()<<std::endl;
+            return tSum;
+        }
 
-        int t;
-        t = temp.top();
-        temp.pop();
-        // Your code here
-        return t + sum(temp); // stub return value (0 for primitive types). Change this!
-        // Note: T() is the default value for objects, and 0 for
-        // primitive types
     }
 
 /**
@@ -61,6 +65,26 @@ namespace QuackFun {
  * @return      Whether the input string had balanced brackets
  */
     bool isBalanced(queue<char> input){
+
+        stack<char> s;
+        while(!input.empty()){
+            char cc = input.front();
+            input.pop();
+            if(cc=='[' )
+                s.push(cc);
+            if(cc==']' && s.size()>0)
+                s.pop();
+            else if(cc==']' && s.size()==0){
+                return false;
+            }
+        }
+
+        if(s.empty())
+            return true;
+        else
+            return false;
+
+
 
         // @TODO: Make less optimistic
         return true;
@@ -158,34 +182,58 @@ namespace QuackFun {
     template<typename T>
     bool verifySame(stack <T> &s, queue <T> &q){
         bool retval = true; // optional
-
+       // std::cout << __LINE__ << " Start Size is " << s.size() << " " << q.size() << std::endl;
         if (s.size() != q.size()) {
-//            std::cout << __LINE__ << std::endl;
+            std::cout << __LINE__ << std::endl;
             return !retval;
         }
 
-        stack<T> sTemp = s;
-        queue<T> qTemp = q;
-        stack<T> qTempStack;
-
-        while (!qTemp.empty()) {
-            qTempStack.push(qTemp.front());
-            qTemp.pop();
-        }
-
-
-        while (!qTempStack.empty()) {
-//            std::cout << __LINE__ << std::endl;
-//            std::cout << sTemp.top() << " " << qTempStack.top() << std::endl;
-            if (sTemp.top() != qTempStack.top()) {
-                std::cout << __LINE__ << std::endl;
+        if (s.empty() || q.empty()) {
+            //std::cout << __LINE__ << std::endl;
+            return retval;
+        } else if (s.size() == 1) {
+            //std::cout << __LINE__ << "Size is 1" << std::endl;
+            if (s.top() == q.back())
+                return retval;
+            else
                 return !retval;
-            }
-            qTempStack.pop();
-            sTemp.pop();
+        } else {
+            //std::cout << __LINE__ << " Size is " << s.size() << std::endl;
+            T stackTop = s.top();
+            s.pop();
+
+            //std::cout << __LINE__ << " Q Front is (before reversing)" << q.front() << std::endl;
+            //---reverse the queue
+            int qsize = q.size();
+            // T backelement = T();
+            for (int i = 0; i < qsize-1; i++) {
+                // backelement = q.back();
+                T frontelement = q.front();
+                q.pop();
+                q.push(frontelement);
+            }//----end of the reverse
+
+            T frontOfReverseQ = q.front();
+            q.pop();
+            //std::cout << __LINE__ << " Q Front is (after reversing)" << frontOfReverseQ << std::endl;
+            //---start reverse the queue ( make it the way ot was)
+            qsize = q.size();
+            // T backelement = T();
+            for (int i = 0; i < qsize; i++) {
+                // backelement = q.back();
+                T frontelement = q.front();
+                q.pop();
+                q.push(frontelement);
+            }//----end -- everse the queue ( make it the way ot was)
+
+//            std::cout << __LINE__ << " Equal size but Size is " << s.size() << std::endl;
+            bool temp = (stackTop == frontOfReverseQ) & verifySame(s, q);
+
+            q.push(frontOfReverseQ);
+            s.push(stackTop);
+            return temp;
         }
+        std::cout << __LINE__ << "End " << std::endl;
         return retval;
     }
-
 }
-
