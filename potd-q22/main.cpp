@@ -19,9 +19,9 @@ void printList(Node *head) {
 
 int main() {
   // Example #1
-  Node n_0, n_1, n_2, n_22, n_3, n_4;
+  Node n_0, n_1, n_2,n_33, n_22, n_3, n_4;
   n_0.data_ = 0;
-  n_1.data_ = 1;
+  n_1.data_ = 1;n_33.data_=3;
   n_2.data_ = 2;
   n_22.data_ = 2;
   n_3.data_ = 3;
@@ -29,7 +29,8 @@ int main() {
 
   n_0.next_ = &n_1;
   n_1.next_ = &n_2;
-  n_2.next_ = NULL;
+  n_2.next_ = &n_33;
+  n_33.next_ = NULL;
 
   n_22.next_ = &n_3;
   n_3.next_ = &n_4;

@@ -63,53 +63,56 @@ Node *listIntersection(Node *first, Node *second){
         //cout << "If Loop Big :" << big->data_ << endl;
         bool found = false;
         small = smallHead;
+        smallPrev= NULL;
 //        for (int j = 0; j < smallSize || small != NULL; j++) {
         while (small != NULL) {
             if (big->data_ == small->data_) {
-                //cout << "found:" << big->data_ << " == " << small->data_ << endl;
+//                cout << "found:" << big->data_ << " == " << small->data_ << endl;
                 found = true;
                 if(smallPrev==NULL){
-                    //cout << "Deleting..1";
+//                    cout << "Deleting..1";
 
                     smallHead = small->next_;
-//                    smallPrev = smallHead;
+                    smallPrev = NULL;
 
                     Node *deleteIt = small;
                     deleteIt->next_=NULL;
                     deleteIt = NULL;
 
                     small = smallHead;
+//                    cout << "Deleting..1";
                 }else{
-                    //cout << "Deleting..2";
+//                    cout << "Deleting..else";
                     smallPrev->next_ = small->next_;
-                    //cout << "Deleting..2";
+//                    cout << "Deleting..2";
                     Node *deleteIt = small;
-                    //cout << "Deleting..2";
+//                    cout << "Deleting..2";
                     deleteIt->next_=NULL;
-                    //cout << "Deleting..2";
-                    small = smallPrev->next_;
-                    //cout << "Deleting..2";
+//                    cout << "Deleting..2";
+                    small = smallHead;
+//                    cout << "Deleting..2";
                     deleteIt=NULL;
                 }
                 break;
             }
             found = false;
-            //cout << "Not found:" << big->data_ << " != " << small->data_ << endl;
+//            cout << "Not found:" << big->data_ << " != " << small->data_ << endl;
             smallPrev = small;
             small = small->next_;
         }
         //cout << " found at the end is:" << found << endl;
         if (found) {
-            if (result == NULL) {
-                //cout << " first found0" << endl;
+            if (head == NULL) {
+//                cout << " first found0" << endl;
                 Node *temp = new Node();
                 temp->data_=big->data_;
                 temp->next_ = NULL;
+//                cout << " temp"<<temp->data_ << endl;
 //                if(big->next_!=NULL)
-//                //cout << " first found1 big" << endl;
+//                cout << " first found1 big" << endl;
                 result = temp;
 //                if(result->next_!=NULL)
-//                //cout << " first found2" << endl;
+                //cout << " first found2" << endl;
                 head = result;
 //                if(head->next_!=NULL)
 //                //cout << " first found3" << endl;
@@ -117,7 +120,7 @@ Node *listIntersection(Node *first, Node *second){
 //                if(big->next_!=NULL)
 //                //cout << " first found4" << endl;
             } else {
-                //cout << " second found" << endl;
+//                cout << " second found" << endl;
                 Node *temp = new Node();
                 temp->data_=big->data_;
                 temp->next_ = NULL;
@@ -127,12 +130,12 @@ Node *listIntersection(Node *first, Node *second){
             }
             big = big->next_;
 //            if(big!=NULL)
-            //cout << " found incrementing  big it will nbe " << big->data_ << endl;
+//            cout << " found incrementing  big it will nbe " << big->data_ << endl;
 
         } else {
             big = big->next_;
 //            if(big!=NULL)
-            //cout << " Not found incrementing big it will nbe " << big->data_ << endl;
+//            cout << " Not found incrementing big it will nbe " << big->data_ << endl;
         }
     }
 //    if (head != NULL) {
