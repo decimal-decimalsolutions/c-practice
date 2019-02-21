@@ -71,5 +71,49 @@ int main() {
   printList(union2);
   cout<<endl;
 
+
+//Second is NULL
+
+  cout<<"First List:"<<endl;
+  printList(&n_0);
+  cout<<"Second List:"<<endl;
+  printList(NULL);
+  Node *union3 = listIntersection(&n_0, NULL);
+  cout<<"Intersection:"<<endl;
+  printList(union3);
+  cout<<endl;
+
+
+  //First is NULL
+
+  cout<<"First List:"<<endl;
+  printList(NULL);
+  cout<<"Second List:"<<endl;
+  printList(&n_22);
+  Node *union4 = listIntersection(NULL, &n_22);
+  cout<<"Intersection:"<<endl;
+  printList(union4);
+  cout<<endl;
+
+
+  //Singleton
+  Node n_000, n_111;
+  n_000.data_=9;
+  n_000.next_=NULL;
+
+  n_111.data_ = 9;
+  n_111.next_ = NULL;
+
+  cout<<"First List:"<<endl;
+  printList(&n_000);
+  cout<<"Second List:"<<endl;
+  printList(&n_111);
+  Node *union5 = listIntersection(&n_000, &n_111);
+  cout<<"Intersection:"<<endl;
+  printList(union5);
+  cout<<endl;
+
+
+
   return 0;
 }
