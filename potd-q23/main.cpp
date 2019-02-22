@@ -75,5 +75,18 @@ int main() {
   printList(r2);
   cout<<endl;
 
+
+     r2 = listSymmetricDifference(NULL, &p10);
+    cout<<"Symmetric Difference"<<endl;
+    printList(r2);
+    cout<<endl;
+
+
+
+     r2 = listSymmetricDifference(&p00, NULL);
+    cout<<"Symmetric Difference"<<endl;
+    printList(r2);
+    cout<<endl;
+
   return 0;
 }
