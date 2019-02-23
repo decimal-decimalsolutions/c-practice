@@ -6,8 +6,9 @@
 template <class T>
 List<T>::List() {
   // @TODO: graded in MP3.1
-    ListNode* head_ = NULL;
-    ListNode* tail_ = NULL;
+     head_ = NULL;
+     tail_ = NULL;
+     length_ = 0;
 }
 
 /**
@@ -37,14 +38,14 @@ typename List<T>::ListIterator List<T>::end() const {
 template <typename T>
 void List<T>::_destroy() {
   /// @todo Graded in MP3.1
-//   ListNode * curr = head;
-// // iterate down the parameter list
-//   while (curr != NULL)
-//   {
-//     curr = head->next;
-//     delete head;
-//     head = curr;
-//   }
+   ListNode * curr = head_;
+ // iterate down the parameter list
+   while (curr != NULL)
+   {
+     curr = head_->next;
+     delete head_;
+     head_ = curr;
+   }
 }
 
 /**
@@ -55,24 +56,26 @@ void List<T>::_destroy() {
  */
 template <typename T>
 void List<T>::insertFront(T const & ndata) {
-  /// @todo Graded in MP3.1
+  // @todo Graded in MP3.1
   ListNode * newNode = new ListNode(ndata);
+//  newNode->data_ = ndata;
+
   if(empty())
    {
-       head = newNode;
-       tail = newNode;
-       nNode->prev = NULL;
-       nNode->next = NULL;
+       head_ = newNode;
+       tail_ = newNode;
+       newNode->prev = NULL;
+       newNode->next = NULL;
 
    }
    else
    {
-       head->prev = newNode;
-       nNode->next = head;
-       nNode->prev = NULL;
-       head = newNode;
+       head_->prev = newNode;
+       newNode->next = head_;
+       newNode->prev = NULL;
+       head_ = newNode;
    }
-   length++;
+   length_++;
 }
 
 /**
@@ -88,19 +91,19 @@ void List<T>::insertBack(const T & ndata) {
       ListNode* newNode = new ListNode(ndata);
       if(empty())
       {
-          head = newNode;
-          tail = newNode;
-          nNode->prev = NULL;
-          nNode->next = NULL;
+          head_ = newNode;
+          tail_ = newNode;
+          newNode->prev = NULL;
+          newNode->next = NULL;
       }
       else
       {
-          tail->next = newNode;
-          newNode->prev = tail;
+          tail_->next = newNode;
+          newNode->prev = tail_;
           newNode->next = NULL;
-          tail = newNode;
+          tail_ = newNode;
       }
-      length++;
+      length_++;
   }
 /**
  * Helper function to split a sequence of linked memory at the node
@@ -122,17 +125,19 @@ template <typename T>
 typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
   /// @todo Graded in MP3.1
   ListNode * curr = start;
+//  ListNode * splitOffStart;
 
-  for (int i = 0; i < splitPoint || curr != NULL; i++) {
+  for (int i = 0; i < splitPoint && curr != NULL; i++) {
     curr = curr->next;
   }
 
   if (curr != NULL) {
+//      splitOffStart = curr;
       curr->prev->next = NULL;
       curr->prev = NULL;
   }
 
-  return NULL;
+  return curr;
 }
 
 /**
