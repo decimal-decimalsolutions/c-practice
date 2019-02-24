@@ -149,9 +149,39 @@ typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
  * be moved more than once.
  */
 template <typename T>
-void List<T>::waterfall() {
+void List<T>::waterfall(){
     /// @todo Graded in MP3.1
+    // std::cout << __LINE__  << " " << std::endl;
+    ListNode *cur = head_;
+
+    //  std::cout << __LINE__  << " " << std::endl;
+    while (cur->next != tail_) {
+        ListNode *temp = cur->next;
+        // std::cout << __LINE__  << " " << std::endl;
+        cur->next = temp->next;
+        temp->next->prev = cur;
+        //   std::cout << __LINE__  << " " << std::endl;
+        tail_->next = temp;
+        //   std::cout << __LINE__  << " " << std::endl;
+        temp->prev = tail_;
+        temp->next = NULL;
+        //   std::cout << __LINE__  << " " << std::endl;
+        tail_ = temp;
+        cur = cur->next;
+        //   std::cout << __LINE__  << " " << std::endl;
+//     if(temp->next != NULL)
+//     {
+//         cur = cur->next;
+//         //  std::cout << __LINE__  << " " << std::endl;
+//         temp = cur->next->next;
+//     }
+//     else
+//         break;
+        // std::cout << __LINE__  << " " << std::endl;
+    }
+
 }
+
 
 /**
  * Reverses the current List.
@@ -174,56 +204,122 @@ void List<T>::reverse() {
  */
 template <typename T>
 void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
-    /// @todo Graded in MP3.2
+        /// @todo Graded in MP3.2
 
-    ListNode *start = head_;
-    ListNode  *end = tail_;
+        ListNode *start = head_;
+        ListNode  *end = tail_;
 
-    if(start==end)
-        return;
+        if(start==end)
+            return;
 
-    while(start!=end->next) {
-        if (start != startPoint) {
-            start=start->next;
-        }else{
+        while(start!=end->next) {
+            if (start != startPoint) {
+                start=start->next;
+            }else{
+                break;
+            }
+        }
+        ListNode *newStartPoint = start;
+        while(newStartPoint!=end->next) {
+            if (newStartPoint != endPoint) {
+                newStartPoint=newStartPoint->next;
+            }else{
+                end = newStartPoint;
+                break;
+            }
+        }
+
+bool toContinueOrNot = true;
+        bool firstExchange = true;
+    ListNode * newStart = startPoint;
+    ListNode * newEnd = endPoint;
+while(toContinueOrNot){
+
+    //in case of even nodes following condition will tell it is the last exchange
+    if (start->next==end && end->prev==start){
+        toContinueOrNot = false;
+    }
+
+    if(start==end){ //Odd
+       break;
+    }else{
+        // exchange
+        ListNode * prevOfStart = start->prev;
+        ListNode * nextOfEnd = end->next;
+        ListNode * nextOfStart = start->next;
+        ListNode * prevOfEnd = end->prev;
+
+        ListNode *temp = end;
+        //two to exchange nothing in between
+        if(!toContinueOrNot && nextOfEnd!=NULL && prevOfStart!=NULL){
+            start->next = nextOfEnd;
+            start->prev = temp;
+            prevOfStart->next = temp;
+            temp->next = start;
+            temp->prev = prevOfStart;
+            nextOfEnd->prev=start;
+            if(firstExchange){
+                newEnd = start;
+                newStart = temp;
+                firstExchange=false;
+            }
             break;
         }
-    }
-    ListNode *newStartPoint = start;
-    while(newStartPoint!=end->next) {
-        if (newStartPoint != endPoint) {
-            newStartPoint=newStartPoint->next;
-        }else{
-            end = newStartPoint;
+//        Two elements list
+        if(!toContinueOrNot  && nextOfEnd==NULL && prevOfStart==NULL){
+            start->next = NULL;
+            start->prev = temp;
+            temp->prev = NULL;
+            temp->next = start;
+            if(firstExchange){
+                newEnd = start;
+                newStart = temp;
+                firstExchange=false;
+            }
             break;
         }
+
+
+        if(temp->prev!=start){
+            temp->prev->next = start;
+        }else{
+            temp->prev->next = nextOfEnd;
+        }
+
+        if(prevOfStart!=NULL) {
+            prevOfStart->next = temp;
+        }
+
+//        if(temp->prev!=start) {
+        start->prev = temp->prev;
+//        }
+
+        temp->prev = prevOfStart;//can be NULL
+//        if(start->next!=temp) {
+            temp->next = start->next;
+//        }
+        //start next has not changed yet
+        start->next->prev = temp;
+        start->next = nextOfEnd;// can be NULL
+        if(nextOfEnd!=NULL){
+            nextOfEnd->prev = prevOfStart;
+        }
+
+        if(firstExchange){
+            newEnd = start;
+            newStart = temp;
+            firstExchange=false;
+        }
+        //move to next and continue
+        start = nextOfStart;
+        end = prevOfEnd;
+
     }
 
-    List<T>  reverseList;
-    while(start!=end->next){
-        reverseList.insertFront(start->data);
-        start = start->next;
-    }
+}
 
-    if(reverseList.head_ == head_ && reverseList.tail_ == tail_){
-        return;
-    }
-
-    reverseList.head_->prev = startPoint->prev;
-    if(startPoint->prev!=NULL) {
-        startPoint->prev->next = reverseList.head_;
-    }
-
-    reverseList.tail_->next = endPoint->next;
-    if(endPoint->next!=NULL) {
-        endPoint->next->prev = reverseList.tail_;
-    }
-
-//    startPoint = reverseList.head_;
-//    endPoint = reverseList.tail_;
-
-    *this = reverseList;
-
+            startPoint=newStart;
+            endPoint = newEnd;
 }
 
 
@@ -249,15 +345,16 @@ void List<T>::reverseNth(int n){
                 }
             }
 
-            ListNode *saveCurr_tail = curr_tail;
+            ListNode *saveCurrTailnext = curr_tail->next;
+            ListNode *saveCurrHeadPrev = curr->prev;
             reverse(curr, curr_tail);
-            if (curr->prev != NULL)
-                curr->prev->next = curr;
-            if (curr_tail->next != NULL)
-                curr_tail->next->prev = curr_tail;
+            if (saveCurrHeadPrev != NULL)
+                saveCurrHeadPrev->next = curr;
+            if (saveCurrTailnext != NULL)
+                saveCurrTailnext->prev = curr_tail;
 
 
-            curr = curr_tail->next;
+            curr = saveCurrTailnext;
             curr_tail = curr;
 
 
