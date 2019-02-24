@@ -5,10 +5,10 @@
 
 template <class T>
 List<T>::List() {
-  // @TODO: graded in MP3.1
-     head_ = NULL;
-     tail_ = NULL;
-     length_ = 0;
+    // @TODO: graded in MP3.1
+    head_ = NULL;
+    tail_ = NULL;
+    length_ = 0;
 }
 
 /**
@@ -17,8 +17,9 @@ List<T>::List() {
  */
 template <typename T>
 typename List<T>::ListIterator List<T>::begin() const {
-  // @TODO: graded in MP3.1
-  return List<T>::ListIterator(NULL);
+    // @TODO: graded in MP3.1
+
+    return List<T>::ListIterator(head_);
 }
 
 /**
@@ -26,8 +27,8 @@ typename List<T>::ListIterator List<T>::begin() const {
  */
 template <typename T>
 typename List<T>::ListIterator List<T>::end() const {
-  // @TODO: graded in MP3.1
-  return List<T>::ListIterator(NULL);
+    // @TODO: graded in MP3.1
+    return List<T>::ListIterator(tail_->next);
 }
 
 
@@ -37,15 +38,15 @@ typename List<T>::ListIterator List<T>::end() const {
  */
 template <typename T>
 void List<T>::_destroy() {
-  /// @todo Graded in MP3.1
-   ListNode * curr = head_;
- // iterate down the parameter list
-   while (curr != NULL)
-   {
-     curr = head_->next;
-     delete head_;
-     head_ = curr;
-   }
+    /// @todo Graded in MP3.1
+    ListNode * curr = head_;
+    // iterate down the parameter list
+    while (curr != NULL)
+    {
+        curr = head_->next;
+        delete head_;
+        head_ = curr;
+    }
 }
 
 /**
@@ -56,26 +57,26 @@ void List<T>::_destroy() {
  */
 template <typename T>
 void List<T>::insertFront(T const & ndata) {
-  // @todo Graded in MP3.1
-  ListNode * newNode = new ListNode(ndata);
+    // @todo Graded in MP3.1
+    ListNode * newNode = new ListNode(ndata);
 //  newNode->data_ = ndata;
 
-  if(empty())
-   {
-       head_ = newNode;
-       tail_ = newNode;
-       newNode->prev = NULL;
-       newNode->next = NULL;
+    if(head_==NULL)
+    {
+        head_ = newNode;
+        tail_ = newNode;
+        newNode->prev = NULL;
+        newNode->next = NULL;
 
-   }
-   else
-   {
-       head_->prev = newNode;
-       newNode->next = head_;
-       newNode->prev = NULL;
-       head_ = newNode;
-   }
-   length_++;
+    }
+    else
+    {
+        head_->prev = newNode;
+        newNode->next = head_;
+        newNode->prev = NULL;
+        head_ = newNode;
+    }
+    length_++;
 }
 
 /**
@@ -86,25 +87,25 @@ void List<T>::insertFront(T const & ndata) {
  */
 template <typename T>
 void List<T>::insertBack(const T & ndata) {
-  /// @todo Graded in MP3.1
+    /// @todo Graded in MP3.1
 
-      ListNode* newNode = new ListNode(ndata);
-      if(empty())
-      {
-          head_ = newNode;
-          tail_ = newNode;
-          newNode->prev = NULL;
-          newNode->next = NULL;
-      }
-      else
-      {
-          tail_->next = newNode;
-          newNode->prev = tail_;
-          newNode->next = NULL;
-          tail_ = newNode;
-      }
-      length_++;
-  }
+    ListNode* newNode = new ListNode(ndata);
+    if(head_==NULL)
+    {
+        head_ = newNode;
+        tail_ = newNode;
+        newNode->prev = NULL;
+        newNode->next = NULL;
+    }
+    else
+    {
+        tail_->next = newNode;
+        newNode->prev = tail_;
+        newNode->next = NULL;
+        tail_ = newNode;
+    }
+    length_++;
+}
 /**
  * Helper function to split a sequence of linked memory at the node
  * splitPoint steps **after** start. In other words, it should disconnect
@@ -123,21 +124,19 @@ void List<T>::insertBack(const T & ndata) {
  */
 template <typename T>
 typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
-  /// @todo Graded in MP3.1
-  ListNode * curr = start;
-//  ListNode * splitOffStart;
+    /// @todo Graded in MP3.1
+    ListNode * curr = start;
 
-  for (int i = 0; i < splitPoint && curr != NULL; i++) {
-    curr = curr->next;
-  }
+    for (int i = 0; i < splitPoint && curr != NULL; i++) {
+        curr = curr->next;
+    }
 
-  if (curr != NULL) {
-//      splitOffStart = curr;
-      curr->prev->next = NULL;
-      curr->prev = NULL;
-  }
+    if (curr != NULL) {
+        curr->prev->next = NULL;
+        curr->prev = NULL;
+    }
 
-  return curr;
+    return curr;
 }
 
 /**
@@ -151,7 +150,7 @@ typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
  */
 template <typename T>
 void List<T>::waterfall() {
-  /// @todo Graded in MP3.1
+    /// @todo Graded in MP3.1
 }
 
 /**
@@ -159,7 +158,7 @@ void List<T>::waterfall() {
  */
 template <typename T>
 void List<T>::reverse() {
-  reverse(head_, tail_);
+    reverse(head_, tail_);
 }
 
 /**
@@ -175,8 +174,58 @@ void List<T>::reverse() {
  */
 template <typename T>
 void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
-  /// @todo Graded in MP3.2
+    /// @todo Graded in MP3.2
+
+    ListNode *start = head_;
+    ListNode  *end = tail_;
+
+    if(start==end)
+        return;
+
+    while(start!=end->next) {
+        if (start != startPoint) {
+            start=start->next;
+        }else{
+            break;
+        }
+    }
+    ListNode *newStartPoint = start;
+    while(newStartPoint!=end->next) {
+        if (newStartPoint != endPoint) {
+            newStartPoint=newStartPoint->next;
+        }else{
+            end = newStartPoint;
+            break;
+        }
+    }
+
+    List<T>  reverseList;
+    while(start!=end->next){
+        reverseList.insertFront(start->data);
+        start = start->next;
+    }
+
+    if(reverseList.head_ == head_ && reverseList.tail_ == tail_){
+        return;
+    }
+
+    reverseList.head_->prev = startPoint->prev;
+    if(startPoint->prev!=NULL) {
+        startPoint->prev->next = reverseList.head_;
+    }
+
+    reverseList.tail_->next = endPoint->next;
+    if(endPoint->next!=NULL) {
+        endPoint->next->prev = reverseList.tail_;
+    }
+
+//    startPoint = reverseList.head_;
+//    endPoint = reverseList.tail_;
+
+    *this = reverseList;
+
 }
+
 
 /**
  * Reverses blocks of size n in the current List. You should use your
@@ -185,8 +234,40 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
  * @param n The size of the blocks in the List to be reversed.
  */
 template <typename T>
-void List<T>::reverseNth(int n) {
-  /// @todo Graded in MP3.2
+void List<T>::reverseNth(int n){
+    /// @todo Graded in MP3.2
+    if (head_ != NULL && tail_ != NULL && n > 1) {
+        ListNode *curr = head_;
+        ListNode *curr_tail = head_;
+        int j = 0;
+
+        while (curr_tail != NULL) {
+            for (int i = 0; i < n - 1; i++) {
+                if (curr_tail->next != NULL) {
+                    curr_tail = curr_tail->next;
+
+                }
+            }
+
+            ListNode *saveCurr_tail = curr_tail;
+            reverse(curr, curr_tail);
+            if (curr->prev != NULL)
+                curr->prev->next = curr;
+            if (curr_tail->next != NULL)
+                curr_tail->next->prev = curr_tail;
+
+
+            curr = curr_tail->next;
+            curr_tail = curr;
+
+
+        }
+        while (head_->prev != NULL)
+            head_ = head_->prev;
+
+        while (tail_->next != NULL)
+            tail_ = tail_->next;
+    }
 }
 
 
@@ -227,8 +308,66 @@ void List<T>::mergeWith(List<T> & otherList) {
  */
 template <typename T>
 typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) {
-  /// @todo Graded in MP3.2
-  return NULL;
+
+    ListNode * curr1=first;
+    ListNode * curr2=second;
+    ListNode * next_curr1;
+    ListNode * next_curr2;
+    ListNode * temp;
+
+    if(first!=NULL && second!=NULL)
+    {
+
+
+        while(curr1!=NULL && curr2!=NULL)
+        {
+            if(curr1->data<curr2->data||curr1->data==curr2->data)
+            {
+
+                next_curr1=curr1->next;//temporary Nodes
+                temp=curr2->prev;//temporary Nodes
+
+                if(temp!=NULL)
+                    temp->next=curr1;
+                curr1->prev=temp;
+                curr1->next=curr2;
+                curr2->prev=curr1;
+
+                curr1=next_curr1;
+
+            }
+
+
+            else if(curr2->data<curr1->data)
+            {
+                next_curr2=curr2->next;//temporary Nodes
+                temp=curr1->prev;//temporary Nodes
+
+                if(temp!=NULL)
+                    temp->next=curr2;
+                curr2->prev=temp;
+
+                curr2->next=curr1;
+                curr1->prev=curr2;
+
+                curr2=next_curr2;
+
+
+            }
+
+
+
+
+        }
+        while(first->prev!=NULL)
+            first=first->prev;
+        return first;
+
+
+    }
+/// @todo Graded in MP3.2
+
+    return NULL; // change me!
 }
 
 /**
@@ -244,6 +383,6 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
  */
 template <typename T>
 typename List<T>::ListNode* List<T>::mergesort(ListNode * start, int chainLength) {
-  /// @todo Graded in MP3.2
-  return NULL;
+    /// @todo Graded in MP3.2
+    return NULL;
 }
