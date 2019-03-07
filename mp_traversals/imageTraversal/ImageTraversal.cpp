@@ -42,7 +42,7 @@ ImageTraversal::Iterator::Iterator() {
  */
 bool ImageTraversal::Iterator::meetTolerance(const Point p){
   //Check if this mark all the points that cab be visited
-  if (_startPoint.x >= _png.width() || p.y >= _png.height())
+  if (p.x >= _png.width() || p.y >= _png.height())
     return false;
 
   HSLAPixel start = (_png.getPixel(_startPoint.x, _startPoint.y));

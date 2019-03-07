@@ -62,9 +62,12 @@ void DFS::add(const Point & point) {
  */
 Point DFS::pop() {
   /** @todo [Part 1] */
-  Point top = _stack.top();
-  _stack.pop();
-  return top;
+  if(!_stack.empty()) {
+    Point top = _stack.top();
+    _stack.pop();
+    return top;
+  }
+  return Point();
 }
 
 /**
