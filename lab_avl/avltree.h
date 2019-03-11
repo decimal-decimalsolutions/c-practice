@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <algorithm>
 #include <iostream>
 #include <vector>
 #include <sstream>
@@ -19,7 +20,7 @@
 template <class K, class V>
 class AVLTree
 {
-  private:
+private:
     /**
      * Node represents a tree node; that is, an element in a AVLTree.
      * It stores a key, value, and pointers to its left and right children.
@@ -38,12 +39,12 @@ class AVLTree
          *  node will hold.
          */
         Node(const K& newKey, const V& newValue)
-            : key(newKey), value(newValue), left(NULL), right(NULL), height(0)
+                : key(newKey), value(newValue), left(NULL), right(NULL), height(0)
         {
         }
     };
 
-  public:
+public:
     /**
      * Constructor to create an empty tree.
      */
@@ -59,6 +60,8 @@ class AVLTree
      * Destructor; frees all nodes associated with this tree.
      */
     ~AVLTree();
+
+    int myMax(int c1, int c2);
 
     /**
      * Assignment operator.
@@ -125,7 +128,7 @@ class AVLTree
     */
     std::vector<std::string> getFunctionOrder() const;
 
-  private:
+private:
     /**
      * The root of the tree.
      */
