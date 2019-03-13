@@ -5,14 +5,13 @@
 #include "../cs225/HSLAPixel.h"
 #include "../cs225/PNG.h"
 #include "../Point.h"
-#include <queue>
 
 #include "ImageTraversal.h"
 
 /**
  * Calculates a metric for the difference between two pixels, used to
  * calculate if a pixel is within a tolerance.
- * 
+ *
  * @param p1 First pixel
  * @param p2 Second pixel
  * @return the difference between two HSLAPixels
@@ -34,128 +33,118 @@ double ImageTraversal::calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2
  */
 ImageTraversal::Iterator::Iterator() {
   /** @todo [Part 1] */
-  _reachEnd = false;
+  traversal_ = NULL;
+  current_ = Point(unsigned(-1), unsigned(-1));
+  visited = new bool[1];
 }
+
+
 
 /**
  * check if meetTolerance
  */
-bool ImageTraversal::Iterator::meetTolerance(const Point p){
-  //Check if this mark all the points that cab be visited
-  if (p.x >= _png.width() || p.y >= _png.height())
-    return false;
+bool ImageTraversal::Iterator::meetTolerance(const Point p, const Point sp){
+    //Check if this mark all the points that cab be visited
+    if (p.x >= _png->width() || p.y >= _png->height())
+        return false;
 
-  HSLAPixel start = (_png.getPixel(_startPoint.x, _startPoint.y));
-  HSLAPixel desired = (_png.getPixel(p.x, p.y));
-  if (calculateDelta(start, desired) >= _tolerance)
-    return false;
+    HSLAPixel start = (_png->getPixel(sp.x, sp.y));
+    HSLAPixel desired = (_png->getPixel(p.x, p.y));
+    if (calculateDelta(desired, start) < _tolerance)
+        return true;
 
-  return true;
+    return false;
 }
 
-/**
- * New added constructor
- */
-ImageTraversal::Iterator::Iterator(ImageTraversal *traversal, PNG png, Point startPoint, double tolerance){
-  //set the class variables so that it can be used by other methods
-  _startPoint = startPoint;
-  _originalStartPoint = startPoint;
-  _tolerance = tolerance;
-  _png = png;
-  _traversal = traversal;
+ImageTraversal::Iterator::Iterator(ImageTraversal & traversal, PNG & png, Point &start, double tolerance)
+{
+        traversal_ = &traversal;
+        _png = &png;
+        _tolerance = tolerance;
+        _startPoint = start;
 
-  for (unsigned i = 0; i < _png.width() * _png.height(); i++) {
-    _visited.push_back(false);
-  }
-  _reachEnd = false;
-
-//--------------------------
-
-  //Check if this mark all the points that cab be visited
-  if (startPoint.x >= _png.width() || startPoint.y >= _png.height())
-    _reachEnd =  false;
-
-  HSLAPixel start = (_png.getPixel(_originalStartPoint.x, _originalStartPoint.y));// startPoint and OriginalPOint are same
-  HSLAPixel desired = (_png.getPixel(startPoint.x, startPoint.y));
-  if (calculateDelta(start, desired) >= _tolerance) {
-    _reachEnd = true;
-  }else{
-    _traversalPath.push_back(startPoint);
-    _visited[startPoint.x + startPoint.y * _png.width()] = true;
+  current_ = traversal_ -> peek();
+  visited = new bool[_png->width() * _png->height()];
+  for(unsigned i = 0; i < _png->width() * _png->height(); i++){
+    visited[i] = 0;
   }
 }
 
-
 /**
- * Iterator increment oprator
+ * Iterator increment opreator.
  *
  * Advances the traversal of the image.
  */
 ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
-
   /** @todo [Part 1] */
+  if(!traversal_ -> empty()){
+    current_ = traversal_ -> pop();
+    unsigned curx = current_.x;
+    unsigned cury = current_.y;
 
-  Point p1 = Point(_startPoint.x + 1, _startPoint.y);
-  Point p2 = Point(_startPoint.x, _startPoint.y + 1);
-  Point p3 = Point(_startPoint.x-1, _startPoint.y);
-  Point p4 = Point(_startPoint.x, _startPoint.y - 1);
+    visited[curx+cury*_png->width()] = true;
 
-  if (meetTolerance(p1)){
-    _traversal->add(p1);
-  }
-  if (meetTolerance(p2)){
-    _traversal->add(p2);
-  }
-  if (meetTolerance(p3)) {
-    _traversal->add(p3);
-  }
-  if (meetTolerance(p4)) {
-    _traversal->add(p4);
-  }
-
-
-  if (_traversal->empty()) {
-      _reachEnd = true;
-      return *this;
-  }
-
-
-  Point next = _traversal->pop();
-  while (_visited[next.x + next.y * _png.width()]) {
-    if (!_traversal->empty()) {
-      next = _traversal->pop();
-    }else {
-      _reachEnd = true;
-      return *this;
+    if(current_.x + 1 < _png->width()){
+      Point p1 = Point(current_.x + 1, current_.y);
+      if(meetTolerance(p1,_startPoint)){
+        traversal_ -> add(p1);
+      }
+    }
+    if(current_.y + 1 < _png->height()){
+      Point p2=Point(current_.x, current_.y + 1);
+      if(meetTolerance(p2,_startPoint)){
+        traversal_ -> add(p2);
+      }
+    }
+    if(int(current_.x - 1) >= 0){
+      Point p3 = Point(current_.x - 1, current_.y);
+      if(meetTolerance(p3,_startPoint)){
+        traversal_ -> add(p3);
+      }
+    }
+    if(int(current_.y - 1) >= 0){
+      Point p4 = Point(current_.x, current_.y - 1);
+      if(meetTolerance(p4,_startPoint)){
+        traversal_ -> add(p4);
+      }
+    }
+    current_ = traversal_ -> peek();
+    while(visited[current_.x + current_.y *_png->width()] == true){
+      traversal_ -> pop();
+      current_ = traversal_ -> peek();
+      if(int(current_.x) == -1 && int(current_.y) == -1){
+        this -> current_ = Point(-1,-1);
+        traversal_ -> pop();
+        return * this;
+      }
     }
   }
-  _startPoint =  next;
-  _visited[_startPoint.x + _startPoint.y * _png.width()] = true;
-  _traversalPath.push_back(_startPoint);
   return *this;
 }
 
-
 /**
  * Iterator accessor opreator.
- * 
+ *
  * Accesses the current Point in the ImageTraversal.
  */
 Point ImageTraversal::Iterator::operator*() {
   /** @todo [Part 1] */
-    //  return Point(0, 0);
-    return _startPoint;
+  return Point(current_.x, current_.y);
 }
 
 /**
  * Iterator inequality operator.
- * 
+ *
  * Determines if two iterators are not equal.
  */
 bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator &other) {
   /** @todo [Part 1] */
-  return other._reachEnd!=_reachEnd;
-
+  if(this -> current_.x == other.current_.x && this -> current_.y == other.current_.y){
+    return false;
+  }
+  return true;
 }
 
-
+ImageTraversal::Iterator::~Iterator(){
+  delete[] visited;
+}
