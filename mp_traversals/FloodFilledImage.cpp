@@ -1,4 +1,4 @@
-
+#include "cs225/PNG.h"
 #include <list>
 #include <iostream>
 
@@ -18,7 +18,7 @@ using namespace cs225;
  */
 FloodFilledImage::FloodFilledImage(const PNG & png) {
   /** @todo [Part 2] */
-  _png = new PNG(png);
+	png_ = png;
 }
 
 /**
@@ -30,11 +30,8 @@ FloodFilledImage::FloodFilledImage(const PNG & png) {
  */
 void FloodFilledImage::addFloodFill(ImageTraversal & traversal, ColorPicker & colorPicker) {
   /** @todo [Part 2] */
-//    ImageTraversal* tra = &traversal;
-    _imageTraversal.push_back(&traversal);
-
-//    ColorPicker* color = &colorPicker;
-    _colorPicker.push_back(&colorPicker);
+    it.push_back(&traversal);
+     newColor.push_back(&colorPicker);
 }
 
 /**
@@ -59,22 +56,18 @@ void FloodFilledImage::addFloodFill(ImageTraversal & traversal, ColorPicker & co
 Animation FloodFilledImage::animate(unsigned frameInterval) const {
   Animation animation;
   /** @todo [Part 2] */
-//  animation.addFrame(*_png);
-
-  for (unsigned i = 0; i <_imageTraversal.size(); i++) {
-    ImageTraversal::Iterator itbegin = _imageTraversal[i]->begin();
-    ImageTraversal::Iterator itend = _imageTraversal[i]->end();
-    unsigned counter = 0;
-    for (ImageTraversal::Iterator it = itbegin; it != itend; ++it) {
-      if (counter%frameInterval == 0) {
-        animation.addFrame(*_png);
+  int count = 0;
+  for(unsigned i = 0; i<it.size(); i++){
+    for(ImageTraversal::Iterator it1 = (*it[i]).begin(); it1 != (*it[i]).end(); ++it1){
+      if(count % frameInterval == 0){
+        animation.addFrame(png_);
       }
-      if((*it).x<_png->width() && (*it).y<_png->height())
-        _png->getPixel((*it).x, (*it).y) = _colorPicker[i]->getColor((*it).x, (*it).y);
-      counter++;
+      Point temp = *it1;
+      png_.getPixel(temp.x, temp.y) = (newColor[i] -> getColor(temp.x, temp.y));
+      count++;
     }
-    animation.addFrame(*_png);
+    animation.addFrame(png_);
   }
-
   return animation;
 }
+
