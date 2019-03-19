@@ -106,7 +106,7 @@ TEST_CASE("BFS visits all points within a tolerance", "[weight=1][part=1]") {
 TEST_CASE("DFS visits all points within a tolerance (includes pixels on image edge)", "[weight=1][part=1]") {
   PNG png = getTestPNG();
   Point startPoint(0, 0);
-  
+
   DFS t(png, startPoint, 0.2);
   unsigned count = 0;
   for (const Point & p : t) { count++; }
