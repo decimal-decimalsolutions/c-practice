@@ -98,5 +98,6 @@ Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query) const
      * @todo Implement this function!
      */
 
-    return Point<Dim>();
+//    return Point<Dim>();
+return findhelper( 0, 0, Points.size()-1, Points[(Points.size()-1)/2], query);
 }
